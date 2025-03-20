@@ -1,6 +1,6 @@
 import logging
 from flask import Flask, jsonify
-from weatherapp.weather import get_weather_by_city
+from weatherapp.weather import WeatherClient
 from weatherapp.config import load_from_env
 import dataclasses as dc
 
@@ -25,7 +25,7 @@ class WeatherResult:
 
 @app.route("/")
 def index():
-    weather = get_weather_by_city("Moscow,Russia", conf.token)
+    weather = WeatherClient.get_weather_by_city("Moscow,Russia", conf.token)
     weather_result = WeatherResult(
         temp=float(weather['temp_C']),
         feels=float(weather['FeelsLikeC'])
