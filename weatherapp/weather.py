@@ -1,4 +1,4 @@
-import requests
+import httpx
 
 def get_weather_by_city(city_name, token):
     weather_url = "http://api.worldweatheronline.com/premium/v1/weather.ashx"
@@ -9,8 +9,11 @@ def get_weather_by_city(city_name, token):
         "num_of_days": 1,
         "lang": "ru"
     }
-    result = requests.get(weather_url, params=params)
-    weather = result.json()
+
+    with httpx.Client() as client:
+        result = client.get(weather_url, params=params)
+        weather = result.json()
+
     if 'data' not in weather or 'current_condition' not in weather['data']:
         return False   
     try:
