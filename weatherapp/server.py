@@ -10,8 +10,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    weather = get_weather_by_city("Moscow,Russia", token)
-    if weather:
-        return f"Сейчас {weather['temp_C']}°C, ощущается как {weather['FeelsLikeC']}°C"
-    else:
-        return "Прогноз сейчас недоступен"
+    try:
+        weather = get_weather_by_city("Moscow,Russia", token)
+        return {
+            "temp": float(weather['temp_C']),
+            "feels": float(weather['FeelsLikeC'])
+        }
+    except Exception as error:
+        return {"error": str(error)}
